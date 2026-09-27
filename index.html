@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es-EC">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Callejón — Bar &amp; Grill en Pasaje, El Oro</title>
+<meta name="description" content="El Callejón: Bar &amp; Grill de comida rápida en Pasaje, El Oro. Alitas, costillas, hamburguesas y picaditas para compartir. Pide por WhatsApp. #Compartefelicidad">
+<link rel="icon" href="fotos/logo.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+
+<style>
+  :root{
+    --ink:#1c1512;
+    --black:#17110d;
+    --charcoal:#241a15;
+    --bg:#150f0c;
+    --surface:#20170f;
+    --surface-2:#2a1f16;
+    --text:#f3ece0;
+    --text-dim:rgba(243,236,224,.82);
+    --paper:#f3ece0;
+    --red:#e0392b;
+    --red-dark:#b02a1f;
+    --gold:#f0b429;
+    --whatsapp:#25d366;
+    --whatsapp-dark:#1ea952;
+    --radius:18px;
+    --radius-pill:999px;
+    --font-display:'Archivo Black', Arial, sans-serif;
+    --font-body:'Manrope', -apple-system, sans-serif;
+    --container:1180px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---------- Browser surfaces (themed, not left to defaults) ---------- */
+  ::selection{ background:var(--red); color:#fff; }
+  :focus-visible{ outline:2px solid var(--gold); outline-offset:3px; border-radius:4px; }
+  ::-webkit-scrollbar{ width:12px; height:12px; }
+  ::-webkit-scrollbar-track{ background:var(--bg); }
+  ::-webkit-scrollbar-thumb{ background:var(--surface-2); border-radius:8px; border:2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--red-dark); }
+  html{ scrollbar-color:var(--surface-2) var(--bg); scrollbar-width:thin; }
+
+  img{ max-width:100%; display:block; }
+  .ic-wa{ width:1em; height:1em; display:inline-block; vertical-align:-0.15em; fill:currentColor; flex:none; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:var(--container); margin:0 auto; padding:0 24px; position:relative; z-index:1; }
+
+  /* ---------- Ambient blobs (slow-drifting blur, life behind the flat dark sections) ---------- */
+  .blob-field{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+  .blob{ position:absolute; border-radius:50%; filter:blur(120px); }
+  @keyframes blobFloatA{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(4vw,-3vh) scale(1.15); } }
+  @keyframes blobFloatB{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-4vw,3vh) scale(1.1); } }
+  @keyframes blobFloatC{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(3vw,3vh) scale(1.08); } }
+  @media (prefers-reduced-motion: reduce){ .blob{ animation:none !important; } }
+  @media (max-width:768px){ .blob{ filter:blur(80px); } }
+
+  h1,h2,h3{ font-family:var(--font-display); line-height:1.05; margin:0; letter-spacing:-0.01em; }
+  p{ margin:0; }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:15px 28px;
+    border-radius:var(--radius-pill);
+    font-weight:800;
+    font-size:15px;
+    white-space:nowrap;
+    border:2px solid transparent;
+    cursor:pointer;
+    transition:transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease, background .25s ease;
+  }
+  .btn:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--whatsapp); color:#0c2415; }
+  .btn-primary:hover{ background:var(--whatsapp-dark); transform:translateY(-2px); box-shadow:0 10px 24px rgba(37,211,102,.35); }
+  .btn-ghost{ background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.55); backdrop-filter:blur(6px); }
+  .btn-ghost:hover{ background:rgba(255,255,255,.18); transform:translateY(-2px); }
+  .btn-dark{ background:var(--black); color:var(--paper); }
+  .btn-dark:hover{ background:var(--charcoal); transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,.25); }
+  .btn-outline{ background:transparent; color:var(--text); border-color:rgba(243,236,224,.3); }
+  .btn-outline:hover{ border-color:var(--red); color:#fff; background:rgba(224,57,43,.12); transform:translateY(-2px); }
+  @media (prefers-reduced-motion: reduce){ .btn{ transition:none; } .btn:hover{ transform:none; } }
+
+  /* ---------- Nav ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(23,17,13,.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    transition:box-shadow .3s ease;
+  }
+  header.nav.scrolled{ box-shadow:0 8px 24px rgba(0,0,0,.35); }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; height:80px; }
+  .nav-brand{ display:flex; align-items:center; gap:12px; }
+  .nav-brand img{ height:56px; width:56px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.7); }
+  .nav-brand span{ color:#fff; font-family:var(--font-display); font-size:19px; }
+  .nav-links{ display:flex; align-items:center; gap:32px; }
+  .nav-links a{ color:rgba(255,255,255,.78); font-weight:600; font-size:15px; transition:color .2s ease; }
+  .nav-links a:hover{ color:#fff; }
+  .nav-cta{ display:flex; align-items:center; }
+  .nav-toggle{ display:none; background:none; border:none; color:#fff; font-size:28px; cursor:pointer; }
+
+  @media (max-width: 860px){
+    .nav-inner{ height:68px; }
+    .nav-brand img{ height:44px; width:44px; }
+    .nav-brand span{ font-size:16px; }
+    .nav-links{ position:fixed; inset:68px 0 auto 0; background:var(--black); flex-direction:column; align-items:flex-start; gap:0; padding:8px 24px 20px; transform:translateY(-12px); opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; border-bottom:1px solid rgba(255,255,255,.08); }
+    .nav-links.open{ opacity:1; transform:translateY(0); pointer-events:auto; }
+    .nav-links a{ padding:14px 0; width:100%; border-bottom:1px solid rgba(255,255,255,.06); }
+    .nav-toggle{ display:block; }
+    .nav-cta .btn span.btn-label-full{ display:none; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    min-height:100dvh;
+    display:flex;
+    align-items:flex-end;
+    background:#000 url('fotos/ambiente-terraza.jpg') center 30%/cover no-repeat;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 680px 460px at 82% 4%, rgba(240,180,41,.16), transparent 58%),
+      radial-gradient(ellipse 620px 520px at 6% 92%, rgba(224,57,43,.18), transparent 62%),
+      linear-gradient(0deg, rgba(20,10,7,.97) 0%, rgba(20,10,7,.76) 32%, rgba(20,10,7,.2) 62%, rgba(20,10,7,.4) 100%);
+  }
+  .hero-content{ position:relative; z-index:2; padding:0 24px 64px; max-width:var(--container); margin:0 auto; width:100%; padding-top:24px; }
+
+  @keyframes heroIn{ from{ opacity:0; transform:translateY(24px); } to{ opacity:1; transform:translateY(0); } }
+  .brand-strip, .hero h1, .hero-sub, .hero-ctas{ animation:heroIn .8s cubic-bezier(.16,1,.3,1) both; }
+  .brand-strip{ animation-delay:0s; }
+  .hero h1{ animation-delay:.1s; }
+  .hero-sub{ animation-delay:.2s; }
+  .hero-ctas{ animation-delay:.3s; }
+  @media (prefers-reduced-motion: reduce){ .brand-strip, .hero h1, .hero-sub, .hero-ctas{ animation:none; } }
+
+  .brand-strip{ display:flex; align-items:center; margin-bottom:26px; }
+  .brand-strip img{
+    height:112px; width:112px; border-radius:50%; object-fit:cover;
+    border:3px solid rgba(255,255,255,.9);
+    box-shadow:0 12px 32px rgba(0,0,0,.55), 0 0 0 7px rgba(224,57,43,.22), 0 0 46px rgba(240,180,41,.16);
+  }
+  .hero h1{ color:#fff; font-size:clamp(32px, 5.4vw, 56px); max-width:17ch; }
+  .hero h1 em{
+    font-family:'Caveat', cursive; font-style:normal; font-weight:700;
+    color:var(--gold);
+    font-size:1.55em; line-height:1;
+    display:inline-block; padding-bottom:.12em; margin-left:.08em;
+    transform:rotate(-3deg);
+    text-shadow:0 3px 0 rgba(0,0,0,.35);
+  }
+  .hero-sub{ color:rgba(255,255,255,.9); font-size:17px; line-height:1.55; max-width:46ch; margin:20px 0 30px; font-weight:500; }
+  .hero-sub .tag{ color:var(--gold); font-weight:800; }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; }
+
+  /* ---------- Sections ---------- */
+  section{ padding:88px 0; }
+  @media (max-width:768px){ section{ padding:56px 0; } }
+  .section-dark{ background:var(--charcoal); position:relative; overflow:hidden; }
+  .section-wash-red{ background:var(--bg); position:relative; overflow:hidden; }
+  .section-wash-gold{ background:var(--bg); position:relative; overflow:hidden; }
+  .section-wash-finale{ background:var(--charcoal); position:relative; overflow:hidden; }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head h2{ font-size:clamp(28px, 4vw, 42px); margin-bottom:16px; }
+  .section-head p{ font-size:16.5px; line-height:1.6; color:var(--text-dim); max-width:52ch; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap:64px; align-items:start; }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; gap:36px; } }
+  .about-photo{ position:relative; border-radius:24px; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,.45); }
+  .about-photo img{ width:100%; height:100%; object-fit:cover; object-position:center 18%; aspect-ratio:8/5; }
+  .about-features{ display:grid; gap:18px; margin-top:32px; }
+  .about-feature{ display:flex; gap:14px; align-items:flex-start; }
+  .about-feature .ic{ flex:none; width:40px; height:40px; border-radius:12px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:19px; }
+  .about-feature:nth-child(2n) .ic{ color:var(--red); background:rgba(224,57,43,.13); }
+  .about-feature strong{ display:block; font-size:15.5px; margin-bottom:2px; }
+  .about-feature span{ font-size:14.5px; color:var(--text-dim); }
+
+  /* ---------- Menu ---------- */
+  .menu-featured{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:40px; }
+  @media (max-width:900px){ .menu-featured{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .menu-featured{ grid-template-columns:1fr; } }
+  .feature-card{ position:relative; border-radius:var(--radius); overflow:hidden; aspect-ratio:16/11; }
+  .feature-card img{ width:100%; height:100%; object-fit:cover; transition:transform .5s cubic-bezier(.16,1,.3,1); }
+  .feature-card:hover img{ transform:scale(1.05); }
+  .feature-card::after{ content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(23,17,13,.88) 0%, rgba(23,17,13,.15) 55%, transparent 75%); }
+  .feature-card .fc-text{ position:absolute; left:22px; right:22px; bottom:20px; z-index:2; color:#fff; }
+  .feature-card .fc-text .name{ font-family:var(--font-display); font-size:23px; }
+  .feature-card .fc-text .price{ color:var(--gold); font-weight:800; font-size:22px; margin-top:4px; }
+
+  .menu-lists{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:768px){ .menu-lists{ grid-template-columns:1fr; } }
+  .menu-card{ background:var(--surface); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:28px 26px; box-shadow:0 12px 32px rgba(0,0,0,.35); }
+  .menu-card h3{ font-size:22px; margin-bottom:18px; }
+  .menu-row{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:13px 0; }
+  .menu-row + .menu-row{ border-top:1px solid rgba(255,255,255,.08); }
+  .menu-row .item-name{ font-weight:700; font-size:15px; }
+  .menu-row .item-note{ display:block; font-size:13px; color:var(--text-dim); font-weight:500; margin-top:2px; }
+  .menu-row .item-price{ font-weight:800; color:var(--gold); font-size:16px; white-space:nowrap; }
+  .menu-note{ margin-top:28px; font-size:14px; color:var(--text-dim); text-align:center; }
+
+  /* ESPACIO PENDIENTE: cuando el negocio entregue el menu completo, reemplazar los precios
+     de arriba (menu-featured y menu-lists) por la carta real completa, y quitar esta nota. */
+
+  /* ---------- Reviews ---------- */
+  .rating-badge{ display:inline-flex; align-items:center; gap:10px; background:var(--surface-2); border-radius:var(--radius-pill); padding:10px 18px; margin-bottom:20px; font-weight:700; font-size:14.5px; }
+  .rating-badge .stars{ color:var(--gold); font-size:16px; letter-spacing:2px; }
+  .reviews-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; }
+  @media (max-width:860px){ .reviews-grid{ grid-template-columns:1fr; } }
+  .review-card{ background:var(--surface); border:1px solid rgba(255,255,255,.06); border-radius:var(--radius); padding:28px; box-shadow:0 12px 32px rgba(0,0,0,.35); }
+  .review-card .stars{ color:var(--gold); font-size:15px; letter-spacing:2px; margin-bottom:14px; }
+  .review-card p{ font-size:15.5px; line-height:1.55; color:var(--text); opacity:.9; margin-bottom:18px; }
+  .review-card .who{ display:flex; align-items:center; gap:12px; }
+  .review-card .avatar{ width:38px; height:38px; border-radius:50%; background:var(--red); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex:none; }
+  .review-card:nth-child(2n) .avatar{ background:var(--gold); color:var(--black); }
+  .review-card .who strong{ display:block; font-size:14.5px; }
+  .review-card .who span{ font-size:13px; color:var(--text-dim); }
+
+  /* ---------- Location ---------- */
+  .location-grid{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:0; border-radius:24px; overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,.35); }
+  @media (max-width:860px){ .location-grid{ grid-template-columns:1fr; } }
+  .location-info{ background:var(--charcoal); padding:48px 40px; display:flex; flex-direction:column; justify-content:center; gap:22px; }
+  .location-info .row{ display:flex; gap:14px; align-items:flex-start; }
+  .location-info .row .ic{ flex:none; width:38px; height:38px; border-radius:10px; background:rgba(240,180,41,.14); color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .location-info .row:nth-child(2n) .ic{ background:rgba(224,57,43,.15); color:var(--red); }
+  .location-info .row strong{ display:block; font-size:15px; color:#fff; margin-bottom:3px; }
+  .location-info .row span{ font-size:14.5px; color:var(--text-dim); line-height:1.5; }
+  .location-info .ctas{ display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+  .map-frame{ min-height:340px; background:#2a221c; }
+  .map-frame iframe{ width:100%; height:100%; min-height:340px; border:0; display:block; filter:saturate(.9); }
+
+  /* ---------- Social band ---------- */
+  .social-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+  @media (max-width:860px){ .social-grid{ grid-template-columns:1fr; } }
+  .social-card{
+    display:flex; align-items:center; gap:16px;
+    background:var(--surface); border:1px solid rgba(255,255,255,.07);
+    border-radius:var(--radius); padding:22px 22px;
+    transition:transform .25s cubic-bezier(.16,1,.3,1), border-color .25s ease, background .25s ease;
+  }
+  .social-card:hover{ transform:translateY(-4px); border-color:rgba(255,255,255,.16); background:var(--surface-2); }
+  .social-card:active{ transform:translateY(-1px) scale(0.99); }
+  .social-icon{
+    flex:none; width:52px; height:52px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:26px;
+  }
+  .social-icon.ig{ background:radial-gradient(circle at 30% 110%, #fdf497 0%, #fd5949 26%, #d6249f 50%, #285AEB 90%); }
+  .social-icon.fb{ background:#1877f2; }
+  .social-icon.tt{ background:#101010; }
+  .social-text{ display:flex; flex-direction:column; }
+  .social-text strong{ font-size:16px; color:var(--text); }
+  .social-text span{ font-size:13.5px; color:var(--text-dim); }
+  .social-arrow{ margin-left:auto; color:var(--text-dim); font-size:18px; transition:transform .25s cubic-bezier(.16,1,.3,1), color .25s ease; }
+  .social-card:hover .social-arrow{ transform:translate(3px,-3px); color:var(--gold); }
+  @media (prefers-reduced-motion: reduce){ .social-card, .social-arrow{ transition:none; } .social-card:hover{ transform:none; } .social-card:hover .social-arrow{ transform:none; } }
+
+  /* ---------- Footer ---------- */
+  footer{ background:var(--black); color:var(--text-dim); padding:64px 0 28px; position:relative; overflow:hidden; }
+  .footer-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+  @media (max-width:768px){ .footer-grid{ grid-template-columns:1fr; gap:32px; } }
+  .footer-brand{ display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .footer-brand img{ height:68px; width:68px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.15); }
+  .footer-brand span{ font-family:var(--font-display); color:#fff; font-size:19px; }
+  .footer-tag{ color:var(--gold); font-weight:800; font-size:13.5px; letter-spacing:.03em; }
+  footer h3{ font-family:var(--font-body); font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:rgba(247,240,227,.4); margin-bottom:16px; font-weight:800; }
+  footer .fline{ font-size:14.5px; line-height:1.7; margin-bottom:8px; }
+  .social-row{ display:flex; gap:12px; margin-top:6px; }
+  .social-row a{ width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.06); display:flex; align-items:center; justify-content:center; font-size:18px; transition:background .2s ease, transform .2s ease; }
+  .social-row a:hover{ background:rgba(255,255,255,.14); transform:translateY(-2px); }
+  /* PENDIENTE: reemplazar href="#" de Instagram/Facebook por los enlaces reales cuando el negocio los confirme. */
+  .footer-bottom{ border-top:1px solid rgba(255,255,255,.08); padding-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:rgba(247,240,227,.4); }
+
+  /* ---------- Floating WhatsApp ---------- */
+  .fab-whatsapp{
+    position:fixed; right:20px; bottom:20px; z-index:60;
+    width:62px; height:62px; border-radius:50%;
+    background:var(--whatsapp); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px;
+    box-shadow:0 10px 28px rgba(37,211,102,.5);
+    transition:transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease;
+  }
+  .fab-whatsapp::before{
+    content:""; position:absolute; inset:-8px; border-radius:50%;
+    border:2px solid var(--whatsapp);
+    animation:waPulse 2.4s ease-out infinite;
+  }
+  .fab-whatsapp:hover{ transform:scale(1.08); box-shadow:0 14px 34px rgba(37,211,102,.6); }
+  .fab-whatsapp:active{ transform:scale(0.95); }
+  .fab-icon{ display:inline-flex; animation:waWiggle 6s ease-in-out infinite; }
+  @keyframes waPulse{ 0%{ transform:scale(1); opacity:.7; } 100%{ transform:scale(1.55); opacity:0; } }
+  @keyframes waWiggle{ 0%, 91%, 100%{ transform:rotate(0deg); } 93%{ transform:rotate(-10deg); } 95%{ transform:rotate(9deg); } 97%{ transform:rotate(-6deg); } }
+  @media (prefers-reduced-motion: reduce){ .fab-whatsapp{ transition:none; } .fab-whatsapp::before{ animation:none; display:none; } .fab-icon{ animation:none; } }
+
+  /* ---------- WhatsApp chat bubble prompt ---------- */
+  .wa-bubble{
+    position:fixed; right:22px; bottom:94px; z-index:59;
+    max-width:228px; background:#fff; color:var(--ink);
+    border-radius:16px 16px 4px 16px; padding:14px 32px 14px 16px;
+    box-shadow:0 14px 34px rgba(0,0,0,.4);
+    font-size:13.5px; line-height:1.45; font-weight:700;
+    opacity:0; transform:translateY(10px) scale(.94); pointer-events:none;
+    transition:opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  .wa-bubble.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+  .wa-bubble::after{
+    content:""; position:absolute; right:26px; bottom:-7px;
+    border-width:8px 8px 0 8px; border-style:solid;
+    border-color:#fff transparent transparent transparent;
+  }
+  .wa-bubble-link{ color:var(--ink); text-decoration:none; display:block; }
+  .wa-bubble-close{
+    position:absolute; top:7px; right:7px; width:20px; height:20px;
+    border:none; background:rgba(23,17,13,.08); border-radius:50%;
+    color:var(--ink); font-size:13px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .wa-bubble-close:hover{ background:rgba(23,17,13,.16); }
+  @media (prefers-reduced-motion: reduce){ .wa-bubble{ transition:opacity .2s ease; } }
+  @media (max-width:420px){ .wa-bubble{ right:16px; max-width:calc(100vw - 96px); } .fab-whatsapp{ right:16px; } }
+
+  /* ---------- Reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+  /* ---------- Mobile scale-down (things read oversized on phones) ---------- */
+  @media (max-width:600px){
+    .brand-strip img{ height:78px; width:78px; border-width:2px; }
+    .hero h1{ font-size:27px; }
+    .hero h1 em{ font-size:1.4em; }
+    .hero-sub{ font-size:14.5px; margin:14px 0 22px; }
+    .hero-ctas .btn{ padding:12px 20px; font-size:13.5px; }
+    .section-head h2{ font-size:24px; }
+    .section-head p{ font-size:15px; }
+    .about-features strong{ font-size:14.5px; }
+    .about-features span{ font-size:13.5px; }
+    .feature-card .fc-text .name{ font-size:19px; }
+    .feature-card .fc-text .price{ font-size:18px; }
+    .menu-card h3{ font-size:19px; }
+    .rating-badge{ font-size:13px; padding:8px 14px; }
+    .review-card p{ font-size:14.5px; }
+    .social-text strong{ font-size:15px; }
+    .footer-brand img{ height:56px; width:56px; }
+    .footer-brand span{ font-size:17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wa-bubble" id="waBubble">
+  <button class="wa-bubble-close" id="waBubbleClose" aria-label="Cerrar mensaje">&times;</button>
+  <a class="wa-bubble-link" href="https://wa.me/593995024999?text=Hola%20El%20Callej%C3%B3n%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">
+    ¿Se te antojó algo? Escríbenos y coordinamos tu pedido 👋
+  </a>
+</div>
+<a href="https://wa.me/593995024999?text=Hola%20El%20Callej%C3%B3n%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener" class="fab-whatsapp" aria-label="Pedir por WhatsApp">
+  <span class="fab-icon">
+    <svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  </span>
+</a>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <div class="nav-brand">
+      <img src="fotos/logo.jpg" alt="El Callejón">
+      <span>El Callejón</span>
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <a href="#nosotros">Nosotros</a>
+      <a href="#menu">Menú</a>
+      <a href="#resenas">Reseñas</a>
+      <a href="#ubicacion">Ubicación</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="https://wa.me/593995024999?text=Hola%20El%20Callej%C3%B3n%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">
+        <svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span class="btn-label-full">Pedir por WhatsApp</span>
+      </a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+      <i class="ph ph-list"></i>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="brand-strip">
+      <img src="fotos/logo.jpg" alt="El Callejón">
+    </div>
+    <h1>Alitas, costillas y hamburguesas para <em>compartir</em></h1>
+    <p class="hero-sub">Bar &amp; Grill de comida rápida en Pasaje. Buen ambiente, buena sazón y todo listo para pedir y compartir con los tuyos. <span class="tag">#Compartefelicidad</span></p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="https://wa.me/593995024999?text=Hola%20El%20Callej%C3%B3n%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">
+        <svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Pedir por WhatsApp
+      </a>
+      <a class="btn btn-ghost" href="#menu">
+        <i class="ph ph-fork-knife"></i> Ver el menú
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="nosotros" class="section-wash-red">
+  <div class="blob-field" aria-hidden="true">
+    <div class="blob" style="width:460px; height:460px; top:-160px; left:-120px; background:rgba(224,57,43,.12); animation:blobFloatA 17s ease-in-out infinite;"></div>
+    <div class="blob" style="width:380px; height:380px; bottom:-160px; right:-100px; background:rgba(240,180,41,.09); animation:blobFloatB 21s ease-in-out infinite;"></div>
+  </div>
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <h2>El barrio se junta en El Callejón</h2>
+      <p style="font-size:16.5px; line-height:1.65; color:var(--text-dim); margin-top:18px; max-width:52ch;">
+        Bar &amp; Grill de comida rápida en Pasaje: alitas, costillas y hamburguesas en porciones grandes, pensadas para la mesa. Nada de cadena, todo cocinado con calma y servido para compartir entre amigos.
+      </p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="ic"><i class="ph ph-users-three"></i></div>
+          <div><strong>Porciones para compartir</strong><span>Combos y bandejas pensados para mesa, no para uno solo.</span></div>
+        </div>
+        <div class="about-feature">
+          <div class="ic"><i class="ph ph-picnic-table"></i></div>
+          <div><strong>Ambiente de barrio</strong><span>Mesas al aire libre, luces cálidas, ambiente sin pretensiones.</span></div>
+        </div>
+        <div class="about-feature">
+          <div class="ic"><svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+          <div><strong>Pedidos directos</strong><span>Escríbenos por WhatsApp y coordinamos tu pedido o reserva.</span></div>
+        </div>
+      </div>
+      <a class="btn btn-outline" href="https://wa.me/593995024999?text=Hola%20El%20Callej%C3%B3n%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener" style="margin-top:32px;">
+        <svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Pedir por WhatsApp
+      </a>
+    </div>
+    <div class="about-photo reveal">
+      <img src="fotos/amigos-compartiendo.jpg" alt="Grupo de amigos compartiendo comida en El Callejón">
+    </div>
+  </div>
+</section>
+
+<section id="menu" style="background:var(--surface-2); position:relative; overflow:hidden;">
+  <div class="blob-field" aria-hidden="true">
+    <div class="blob" style="width:420px; height:420px; top:-140px; right:-100px; background:rgba(240,180,41,.1); animation:blobFloatC 19s ease-in-out infinite;"></div>
+    <div class="blob" style="width:360px; height:360px; bottom:-150px; left:-110px; background:rgba(224,57,43,.09); animation:blobFloatA 23s ease-in-out infinite;"></div>
+  </div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Antojos para compartir</h2>
+      <p>Alitas, costillas y combos armados para la mesa.</p>
+    </div>
+
+    <div class="menu-featured">
+      <div class="feature-card reveal">
+        <img src="fotos/alitas-stock.jpg" alt="Alitas BBQ con papas y arroz">
+        <div class="fc-text">
+          <div class="name">20 alitas</div>
+          <div class="price">$12.75</div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <img src="fotos/costilla-stock.jpg" alt="Costillas BBQ ahumadas">
+        <div class="fc-text">
+          <div class="name">Costilla entera</div>
+          <div class="price">$8.50</div>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <img src="fotos/combo-stock.jpg" alt="Combo de hamburguesa con papas y gaseosa">
+        <div class="fc-text">
+          <div class="name">Combo 10 alitas doble</div>
+          <div class="price">$11.99</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-lists">
+      <div class="menu-card reveal">
+        <h3>Costillas y picaditas</h3>
+        <div class="menu-row">
+          <div><span class="item-name">Costilla media</span><span class="item-note">Con papas y ensalada</span></div>
+          <div class="item-price">$5.99</div>
+        </div>
+        <div class="menu-row">
+          <div><span class="item-name">Costilla entera</span><span class="item-note">Con papas y ensalada</span></div>
+          <div class="item-price">$8.50</div>
+        </div>
+        <div class="menu-row">
+          <div><span class="item-name">Picadita normal</span><span class="item-note">Para compartir</span></div>
+          <div class="item-price">$7.50</div>
+        </div>
+        <div class="menu-row">
+          <div><span class="item-name">Picadita especial</span><span class="item-note">Para compartir</span></div>
+          <div class="item-price">$8.50</div>
+        </div>
+      </div>
+
+      <div class="menu-card reveal">
+        <h3>Combos y alitas</h3>
+        <div class="menu-row">
+          <div><span class="item-name">Combo 5 alitas</span><span class="item-note">Papas + hamburguesa + gaseosa</span></div>
+          <div class="item-price">$6.50</div>
+        </div>
+        <div class="menu-row">
+          <div><span class="item-name">Combo 10 alitas</span><span class="item-note">Papas + hamburguesa + gaseosa</span></div>
+          <div class="item-price">$9.50</div>
+        </div>
+        <div class="menu-row">
+          <div><span class="item-name">Combo 10 alitas doble</span><span class="item-note">Papas + 2 hamburguesas + gaseosa</span></div>
+          <div class="item-price">$11.99</div>
+        </div>
+        <div class="menu-row">
+          <div><span class="item-name">20 alitas</span><span class="item-note">Porción completa</span></div>
+          <div class="item-price">$12.75</div>
+        </div>
+      </div>
+    </div>
+    <p class="menu-note">Precios referenciales. Consulta por WhatsApp el resto de la carta y promociones del día.</p>
+  </div>
+</section>
+
+<section id="resenas" class="section-wash-gold">
+  <div class="blob-field" aria-hidden="true">
+    <div class="blob" style="width:440px; height:440px; top:-150px; right:-110px; background:rgba(240,180,41,.12); animation:blobFloatB 18s ease-in-out infinite;"></div>
+    <div class="blob" style="width:340px; height:340px; bottom:-140px; left:-90px; background:rgba(224,57,43,.08); animation:blobFloatC 22s ease-in-out infinite;"></div>
+  </div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Lo que dice el barrio</h2>
+      <div class="rating-badge">
+        <span class="stars">★★★★☆</span> 4.5 sobre 5 · 88 reseñas en Google
+      </div>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Las costillas enteras valen la pena, bien jugosas, y el combo rinde para dos sin problema."</p>
+        <div class="who"><div class="avatar">MV</div><div><strong>Mayra Villacís</strong><span>Pasaje</span></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Fuimos con la familia un domingo y el ambiente se sintió como reunión de barrio, buena onda todo."</p>
+        <div class="who"><div class="avatar">KO</div><div><strong>Kevin Ochoa</strong><span>Pasaje</span></div></div>
+      </div>
+      <div class="review-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Pedí por WhatsApp y llegó rapidito, las alitas con esa salsa quedan diez de diez."</p>
+        <div class="who"><div class="avatar">FE</div><div><strong>Fernanda Espinoza</strong><span>El Oro</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ubicacion" class="section-dark">
+  <div class="blob-field" aria-hidden="true">
+    <div class="blob" style="width:400px; height:400px; top:-130px; left:10%; background:rgba(224,57,43,.1); animation:blobFloatA 20s ease-in-out infinite;"></div>
+    <div class="blob" style="width:340px; height:340px; bottom:-140px; right:5%; background:rgba(240,180,41,.07); animation:blobFloatB 24s ease-in-out infinite;"></div>
+  </div>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Encuéntranos en Pasaje</h2>
+    </div>
+    <div class="location-grid reveal">
+      <div class="location-info">
+        <div class="row">
+          <div class="ic"><i class="ph ph-map-pin"></i></div>
+          <div><strong>Dirección</strong><span>Av. Jubones y Municipalidad, Pasaje, El Oro, Ecuador. También tenemos sede en Machala.</span></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></div>
+          <div><strong>Pedidos y reservas</strong><span>0995 024 999, atención directa por WhatsApp.</span></div>
+        </div>
+        <div class="ctas">
+          <a class="btn btn-primary" href="https://wa.me/593995024999?text=Hola%20El%20Callej%C3%B3n%2C%20quiero%20hacer%20un%20pedido" target="_blank" rel="noopener">
+            <svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> Pedir por WhatsApp
+          </a>
+          <a class="btn btn-dark" href="https://www.google.com/maps/dir/?api=1&destination=Av.+Jubones+y+Municipalidad,+Pasaje,+El+Oro,+Ecuador" target="_blank" rel="noopener">
+            <i class="ph ph-navigation-arrow"></i> Cómo llegar
+          </a>
+        </div>
+      </div>
+      <div class="map-frame">
+        <iframe
+          src="https://www.google.com/maps?q=Av.+Jubones+y+Municipalidad,+Pasaje,+El+Oro,+Ecuador&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación de El Callejón en Pasaje"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="redes" class="section-wash-finale">
+  <div class="blob-field" aria-hidden="true">
+    <div class="blob" style="width:420px; height:420px; top:-140px; left:-100px; background:rgba(224,57,43,.11); animation:blobFloatC 19s ease-in-out infinite;"></div>
+    <div class="blob" style="width:420px; height:420px; bottom:-150px; right:-110px; background:rgba(240,180,41,.1); animation:blobFloatA 23s ease-in-out infinite;"></div>
+  </div>
+  <div class="wrap">
+    <div class="section-head reveal" style="margin-bottom:36px;">
+      <h2>Síguenos en redes</h2>
+      <p>Fotos del día a día, promos y el menú completo, siempre frescos en nuestras redes.</p>
+    </div>
+    <div class="social-grid reveal">
+      <a class="social-card" href="https://www.instagram.com/elcallejonpasaje/" target="_blank" rel="noopener">
+        <div class="social-icon ig"><i class="ph-fill ph-instagram-logo"></i></div>
+        <div class="social-text"><strong>Instagram</strong><span>@elcallejonpasaje</span></div>
+        <i class="ph ph-arrow-up-right social-arrow"></i>
+      </a>
+      <a class="social-card" href="https://www.facebook.com/elcallejonpasaje" target="_blank" rel="noopener">
+        <div class="social-icon fb"><i class="ph-fill ph-facebook-logo"></i></div>
+        <div class="social-text"><strong>Facebook</strong><span>El Callejón</span></div>
+        <i class="ph ph-arrow-up-right social-arrow"></i>
+      </a>
+      <a class="social-card" href="https://www.tiktok.com/@elcallejonpasaje" target="_blank" rel="noopener">
+        <div class="social-icon tt"><i class="ph-fill ph-tiktok-logo"></i></div>
+        <div class="social-text"><strong>TikTok</strong><span>@elcallejonpasaje</span></div>
+        <i class="ph ph-arrow-up-right social-arrow"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="blob-field" aria-hidden="true">
+    <div class="blob" style="width:380px; height:380px; top:-130px; left:20%; background:rgba(224,57,43,.07); animation:blobFloatB 22s ease-in-out infinite;"></div>
+  </div>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="fotos/logo.jpg" alt="El Callejón">
+          <span>El Callejón</span>
+        </div>
+        <div class="footer-tag">#Compartefelicidad</div>
+        <p class="fline" style="margin-top:16px; max-width:32ch;">Bar &amp; Grill de comida rápida en Pasaje, El Oro. Alitas, costillas, hamburguesas y picaditas para compartir.</p>
+      </div>
+      <div>
+        <h3>Horario y ubicación</h3>
+        <p class="fline">Av. Jubones y Municipalidad, Pasaje, El Oro. También en Machala.</p>
+        <p class="fline">Horario: escríbenos por WhatsApp y te confirmamos disponibilidad al momento.</p>
+      </div>
+      <div>
+        <h3>Síguenos</h3>
+        <div class="social-row">
+          <a href="https://wa.me/593995024999" target="_blank" rel="noopener" aria-label="WhatsApp"><svg class="ic-wa" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+          <a href="https://www.instagram.com/elcallejonpasaje/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+          <a href="https://www.facebook.com/elcallejonpasaje" target="_blank" rel="noopener" aria-label="Facebook"><i class="ph ph-facebook-logo"></i></a>
+          <a href="https://www.tiktok.com/@elcallejonpasaje" target="_blank" rel="noopener" aria-label="TikTok"><i class="ph ph-tiktok-logo"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 El Callejón. Todos los derechos reservados.</span>
+      <span>Bar &amp; Grill · Pasaje, El Oro</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile nav toggle
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', function(){
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ navLinks.classList.remove('open'); });
+  });
+
+  // Sticky nav shadow via sentinel (no scroll listener)
+  var nav = document.getElementById('nav');
+  var sentinel = document.createElement('div');
+  sentinel.style.position = 'absolute';
+  sentinel.style.top = '1px';
+  sentinel.style.height = '1px';
+  document.body.prepend(sentinel);
+  new IntersectionObserver(function(entries){
+    nav.classList.toggle('scrolled', !entries[0].isIntersecting);
+  }).observe(sentinel);
+
+  // Scroll reveal
+  var revealObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
+
+  // WhatsApp chat bubble prompt: show once per session, dismissible
+  var waBubble = document.getElementById('waBubble');
+  var waBubbleClose = document.getElementById('waBubbleClose');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try{
+    if(!sessionStorage.getItem('waBubbleDismissed')){
+      setTimeout(function(){ waBubble.classList.add('show'); }, reduceMotion ? 400 : 2600);
+    }
+  }catch(e){}
+  waBubbleClose.addEventListener('click', function(e){
+    e.preventDefault();
+    waBubble.classList.remove('show');
+    try{ sessionStorage.setItem('waBubbleDismissed', '1'); }catch(e){}
+  });
+</script>
+
+</body>
+</html>
